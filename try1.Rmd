@@ -14,7 +14,7 @@ library(tigris)
 library(ipumsr)
 ```
 
-```{r}
+``{r}
 web_url <- "https://en.wikipedia.org/wiki/List_of_U.S._states_and_territories_by_carbon_dioxide_emissions"
 
 raw_data_wiki <- web_url |>
@@ -40,7 +40,7 @@ clean_wiki <- raw_data_wiki |>
     mutate(e_per_capita = parse_number(e_per_capita))
 ```
 
-```{r}
+``{r}
 pop <- get_decennial(geography = "state",
                      variables = "P001001",
                      year = 2010,
@@ -51,7 +51,7 @@ pop <- get_decennial(geography = "state",
 ```
 
 
-```{r}
+``{r}
 pop |> 
   filter(! NAME %in% c("Alaska", "Hawaii", "Puerto Rico")) |> 
   ggplot(fill=e_per_capita) +

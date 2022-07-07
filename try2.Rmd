@@ -5,7 +5,7 @@ date: '2022-07-07'
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(rvest)
 library(sf)
@@ -14,6 +14,7 @@ library(rnaturalearthdata)
 library(WDI)
 library(gganimate)
 library(transformr)
+library(distill)
 ```
 
 ```{r get_data}
@@ -41,28 +42,19 @@ combined <- st_as_sf(merge(co2data, world, "name"))
 static_map <- combined |> 
   ggplot() +
   geom_sf(aes(fill=per_capita)) +
-  theme_void() 
+  theme_void() +
+  scale_fill_viridis_c(direction = -1)
 
-# a different animating approach
-static_map +
+# animating it
+animated_map <- static_map +
   transition_states(year,
                     transition_length = 2,
                     state_length = 1) +
-  ggtitle('now showing {closest_state}')
-  
-
-# trying to animate it
-static_map +
-  transition_states(
-    year,
-    transition_length = 2,
-    state_length = 1
-  ) +
+  ggtitle('Year: {closest_state}') +
   enter_fade() + 
   exit_shrink() 
 
-
-  # doesn't work labs(title = "Year: {year}")
+write_rds(animated_map, "animated_map.rds")
 ```
 
 

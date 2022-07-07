@@ -1,0 +1,37 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this site",
+      "description": "Some additional details about the website",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2022-07-07T17:39:14-05:00"
+    },
+    {
+      "path": "index.html",
+      "title": "global-co2-emissions",
+      "description": "\"Welcome to the website. I hope you enjoy it!\"\n",
+      "author": [],
+      "contents": "\n\n\n\n\n\n\n",
+      "last_modified": "2022-07-07T17:43:38-05:00"
+    },
+    {
+      "path": "try1.html",
+      "title": "try1",
+      "author": [],
+      "date": "2022-07-05",
+      "contents": "\n\n\n\n\n\n\n\n\nglobal-co2-emissions\n\n\nHome\nAbout\n☰\n\n\n  \n    \n      \n        \n        \n        \n      \n      \n    \n    \n      \n  Home\n\n\n  About\n\n      \n  \n\n\n\n\n\n\ntry1\n2022-07-05\n\n\n\n\n``{r} web_url <- “https://en.wikipedia.org/wiki/List_of_U.S._states_and_territories_by_carbon_dioxide_emissions”\nraw_data_wiki <- web_url |> read_html() |>\nhtml_element(“.wikitable.sortable”) |> html_table()\nclean_wiki <- raw_data_wiki |> rename(“state” = “Jurisdiction”,\n“e_per_capita” =\nAnnual CO2 emissions  per capita(in metric tons)) |>\nselect(state, e_per_capita) |> filter(state != “States, D.C. and\nterritories total”, state != “States and D.C. Total”, state != “U.S.\nVirgin Islands”, state != “District of Columbia”, state != “Guam”, state\n!= “American Samoa”, state != “Northern Mariana Islands”, # state !=\n“Alaska”, # state != “Hawaii”, state != “Puerto Rico”) |>\nrename(NAME= state) |> mutate(e_per_capita =\nparse_number(e_per_capita))\n\n``{r}\npop <- get_decennial(geography = \"state\",\n                     variables = \"P001001\",\n                     year = 2010,\n                     output=\"wide\",\n                     geometry=TRUE) |> \n  # merge(pop, clean_wiki, by = \"NAME\")\n  # mutate(capita = clean_wiki$e_per_capita)\n``{r} pop |> filter(! NAME %in% c(“Alaska”, “Hawaii”, “Puerto\nRico”)) |> ggplot(fill=e_per_capita) + geom_sf() ```\n\n\n\n\n\n\n\n\n\n\n",
+      "last_modified": "2022-07-07T17:43:40-05:00"
+    },
+    {
+      "path": "try2.html",
+      "title": "try2",
+      "author": [],
+      "date": "2022-07-07",
+      "contents": "\n\n\n\n\n\n\n\n\nglobal-co2-emissions\n\n\nHome\nAbout\n☰\n\n\n  \n    \n      \n        \n        \n        \n      \n      \n    \n    \n      \n  Home\n\n\n  About\n\n      \n  \n\n\n\n\n\n\ntry2\n2022-07-07\n\n\n\n\n## [1] \"sf\"         \"data.frame\"\n\n\n\n\n\n\n\n\n\n\n",
+      "last_modified": "2022-07-07T17:43:43-05:00"
+    }
+  ],
+  "collections": []
+}

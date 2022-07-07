@@ -1,0 +1,9 @@
+name: "."
+title: "Global CO2 emissions"
+description: |
+  Changes over time in national CO2 emissions per capita.
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Project"
+      href: index.html
