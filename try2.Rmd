@@ -34,7 +34,8 @@ co2data <- raw_co2data |>
   rename(per_capita = EN.ATM.CO2E.PC) |> 
   rename(name = country)
 
-combined <- st_as_sf(merge(co2data, world, "name"))
+combined <- st_as_sf(merge(co2data, world, "name")) |> 
+  mutate(per_capita = as.double(per_capita)) 
 ```
 
 
@@ -55,6 +56,7 @@ animated_map <- static_map +
   exit_shrink() 
 
 write_rds(animated_map, "animated_map.rds")
+
 ```
 
 

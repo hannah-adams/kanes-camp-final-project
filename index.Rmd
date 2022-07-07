@@ -1,22 +1,26 @@
 ---
-title: "global-co2-emissions"
+title: "Global Carbon Dioxide Emissions Over Time"
 description: |
-  "Welcome to the website. I hope you enjoy it!"
+  "A graph to demonstrate trends in per capita CO2 emissions"
 site: distill::distill_website
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
-
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
-
-# Learn more about publishing to GitHub Pages at:
-# https://rstudio.github.io/distill/publish_website.html#github-pages
+library(rvest)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(WDI)
+library(gganimate)
+library(transformr)
+library(distill)
 
 ```
 
-```{r}
+```{r display_graph}
 read_rds("animated_map.rds")
 ```
+
+Source: World Development Indicators (World Bank)
