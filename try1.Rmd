@@ -1,0 +1,60 @@
+---
+title: "try1"
+output: html_document
+date: '2022-07-05'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rvest)
+library(tidycensus)
+library(ggthemes)
+library(tigris)
+library(ipumsr)
+```
+
+```{r}
+web_url <- "https://en.wikipedia.org/wiki/List_of_U.S._states_and_territories_by_carbon_dioxide_emissions"
+
+raw_data_wiki <- web_url |>
+  read_html() |>
+  html_element(".wikitable.sortable") |>
+  html_table()
+
+clean_wiki <- raw_data_wiki |> 
+  rename("state" = "Jurisdiction",
+         "e_per_capita" = `Annual CO2 emissions  per capita(in metric tons)`) |> 
+  select(state, e_per_capita) |> 
+  filter(state != "States, D.C. and territories total",
+         state != "States and D.C. Total",
+         state != "U.S. Virgin Islands",
+         state !=  "District of Columbia",
+         state != "Guam",
+         state != "American Samoa",
+         state != "Northern Mariana Islands",
+         # state != "Alaska",
+        # state != "Hawaii",
+         state != "Puerto Rico") |> 
+    rename(NAME= state) |> 
+    mutate(e_per_capita = parse_number(e_per_capita))
+```
+
+```{r}
+pop <- get_decennial(geography = "state",
+                     variables = "P001001",
+                     year = 2010,
+                     output="wide",
+                     geometry=TRUE) |> 
+  # merge(pop, clean_wiki, by = "NAME")
+  # mutate(capita = clean_wiki$e_per_capita)
+```
+
+
+```{r}
+pop |> 
+  filter(! NAME %in% c("Alaska", "Hawaii", "Puerto Rico")) |> 
+  ggplot(fill=e_per_capita) +
+  geom_sf()
+```
+

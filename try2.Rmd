@@ -1,0 +1,69 @@
+---
+title: "try2"
+output: html_document
+date: '2022-07-07'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rvest)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(WDI)
+library(gganimate)
+library(transformr)
+```
+
+```{r get_data}
+raw_co2data <- WDI(country="all",
+    indicator = "EN.ATM.CO2E.PC",
+    start = 1990,
+    end = 2019,
+    language = "en")
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+class(world)
+```
+
+```{r clean_co2 data}
+co2data <- raw_co2data |> 
+  group_by(year, country) |> 
+  rename(per_capita = EN.ATM.CO2E.PC) |> 
+  rename(name = country)
+
+combined <- st_as_sf(merge(co2data, world, "name"))
+```
+
+
+```{r worldmap}
+static_map <- combined |> 
+  ggplot() +
+  geom_sf(aes(fill=per_capita)) +
+  theme_void() 
+
+# a different animating approach
+static_map +
+  transition_states(year,
+                    transition_length = 2,
+                    state_length = 1) +
+  ggtitle('now showing {closest_state}')
+  
+
+# trying to animate it
+static_map +
+  transition_states(
+    year,
+    transition_length = 2,
+    state_length = 1
+  ) +
+  enter_fade() + 
+  exit_shrink() 
+
+
+  # doesn't work labs(title = "Year: {year}")
+```
+
+
+
