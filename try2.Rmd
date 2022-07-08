@@ -42,7 +42,9 @@ combined <- st_as_sf(merge(co2data, world, "name")) |>
 ```{r worldmap}
 static_map <- combined |> 
   ggplot() +
-  geom_sf(aes(fill=per_capita)) +
+  geom_sf(aes(fill=per_capita, color = per_capita)) +
+  labs(fill="CO2 emissions (metric tons per capita)",
+       color="CO2 emissions (metric tons per capita)")
   theme_void() +
   scale_fill_viridis_c(direction = -1)
 
